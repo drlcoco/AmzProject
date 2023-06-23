@@ -1,0 +1,83 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col mt-4">
+      <div class="m-5 text-center">
+        <div *ngIf="auth?.name" class="col-11 d-flex ms-5 mt-5 mb-3 justify-content-center">
+          <h1 class="fs-1">Tus compras. </h1>
+          <h1 class="text-secondary ms-2 fs-1">{{ auth?.name }}</h1>
+        </div>
+        <div *ngIf="!auth?.name && auth?.email" class="col-11 d-flex ms-5 mt-5 mb-3 justify-content-center">
+          <h1 class="fs-1">Tus compras. </h1>
+          <h1 class="text-secondary ms-2 fs-1">{{ auth?.email }}</h1>
+        </div>
+        <table
+          [ngClass]="this.updateTableTheme() ? 'table table-dark table-striped mt-5' : 'table table-light table-striped mt-5'"
+          *ngIf="myPurchases && myPurchases.length; else noPurchases"
+        >
+        <!-- <table
+          class="table table-light table-striped mt-5"
+          *ngIf="myPurchases && myPurchases.length; else noPurchases"
+        > -->
+          <thead>
+            <tr class="fw-b fs-5">
+              <th scope="col" class="py-4">Imagen</th>
+              <th scope="col" class="py-4">Nº Compra</th>
+              <th scope="col" class="py-4">Producto</th>
+              <th scope="col" class="py-4">Precio</th>
+              <th scope="col" class="py-4">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of this.myPurchases">
+              <td class="justify-content center align-self-center">
+                <img src="{{ producto.image }}" width="50" height="50" />
+              </td>
+              <td class="pt-4">{{ producto.id }}</td>
+              <td class="pt-4">{{ producto.title }}</td>
+              <td class="pt-4">{{ producto.price }}</td>
+              <td class="pt-4">{{ producto.created_at | date : "dd/MM/y HH:mm" }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noPurchases>
+          <div class="row m-5 d-flex justify-content-center">
+            <div class="col-xs-12 col-lg-6 my-2 justify-content-center">
+              <h1 class="text-center fs-1 fw-b my-5">
+                No hay compras realizadas
+              </h1>
+              <h2>Aún no ha comprado ningún producto</h2>
+              <div class="my-5 justify-content-center">
+                <a
+                  class="btn btn-primary w-25"
+                  role="button"
+                  [routerLink]="['/products']"
+                  >Comprar</a
+                >
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <div class="text-center mt-3" *ngIf="calcularTotal() > 0">
+          <div class="mt-5 mb-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="76"
+              height="76"
+              fill="currentColor"
+              class="bi bi-bag-heart"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5Zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0ZM14 14V5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1ZM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"
+              />
+            </svg>
+          </div>
+          <div class="d-grid gap-2 col-6 mx-auto">
+            <h1>Total {{ calcularTotal() | currency }}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
